@@ -1,4 +1,4 @@
-A Maven Enforcer rule to ban duplicate classes on the classpath.
+# A Maven Enforcer rule to ban duplicate classes on the classpath.
 
 Having duplicate entries for the same classname on the classpath makes your
 software less stable. Depending on the order of classpath entries, which in
@@ -19,7 +19,7 @@ It ignores duplicate classes which conflict with JDK classes.
 This is based on the enforcer plugin with the same name from the Extra Enforcer
 Rules project: http://mojo.codehaus.org/extra-enforcer-rules/banDuplicateClasses.html
 
-TODO
+## TODO
 - Group dependencies when generating errors and provide an option for full listing
 - Allow checks for other resource types (e.g., xml, properties)
 - Provide an exclusion list of regex patterns
