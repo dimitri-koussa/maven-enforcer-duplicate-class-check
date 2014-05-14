@@ -6,16 +6,18 @@
 
     <groupId>au.net.coldeq</groupId>
     <artifactId>maven-enforcer-duplicate-class-check</artifactId>
-    <version>1.4</version>
+    <version>1.5-SNAPSHOT</version>
     <properties>
         <api.version>1.2</api.version>
         <maven.version>2.0.9</maven.version>
+         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
     <build>
       <plugins>
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-compiler-plugin</artifactId>
+          <version>3.1</version>
           <configuration>
             <target>1.5</target>
             <source>1.5</source>
