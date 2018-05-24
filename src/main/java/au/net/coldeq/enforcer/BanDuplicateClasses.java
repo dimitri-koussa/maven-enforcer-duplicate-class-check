@@ -28,14 +28,22 @@ import org.apache.maven.project.MavenProject;
 import org.codehaus.plexus.component.configurator.expression.ExpressionEvaluationException;
 import org.codehaus.plexus.util.StringUtils;
 
-import java.io.*;
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.*;
-import java.util.jar.*;
+import java.util.jar.JarEntry;
+import java.util.jar.JarFile;
+
+import static java.lang.String.format;
+import static java.util.Collections.emptySet;
 
 /**
  * Based of the class of the same name from the maven enforcer plugin extras project.
  */
 public class BanDuplicateClasses implements EnforcerRule {
+
     private static final Set<String> ALLOWED_ARTIFACT_TYPES = new HashSet<String>() {{
         add("jar");
         add("test-jar");
@@ -43,6 +51,12 @@ public class BanDuplicateClasses implements EnforcerRule {
 
     private Log log;
 
+    /**
+     * Simple param. This rule will fail if the value is true.
+     */
+    private Set<String> ignoredArtifacts = emptySet();
+
+    @Override
     public void execute(EnforcerRuleHelper helper) throws EnforcerRuleException {
         this.log = helper.getLog();
         MavenProject project = getMavenProject(helper);
@@ -50,7 +64,17 @@ public class BanDuplicateClasses implements EnforcerRule {
         int numberOfArtifacts = artifacts.size();
         int numberProcessed = 0;
         Map<Artifact, Set<String>> artifactToClasses = new HashMap<Artifact, Set<String>>();
+
+
+
         for (Artifact artifact : artifacts) {
+
+            String currentArtifact = format("%s:%s", artifact.getGroupId(), artifact.getArtifactId());
+            if (ignoredArtifacts.contains(currentArtifact)) {
+                log.info("Ignoring " + currentArtifact);
+                continue;
+            }
+
             HashSet<String> classesFoundInArtifact = new HashSet<String>();
             artifactToClasses.put(artifact, classesFoundInArtifact);
 
@@ -225,6 +249,7 @@ public class BanDuplicateClasses implements EnforcerRule {
     /**
      * {@inheritDoc}
      */
+    @Override
     public boolean isCacheable() {
         return false;
     }
@@ -232,6 +257,7 @@ public class BanDuplicateClasses implements EnforcerRule {
     /**
      * {@inheritDoc}
      */
+    @Override
     public boolean isResultValid(EnforcerRule enforcerRule) {
         return false;
     }
@@ -239,6 +265,7 @@ public class BanDuplicateClasses implements EnforcerRule {
     /**
      * {@inheritDoc}
      */
+    @Override
     public String getCacheId() {
         return "Does not matter as not cacheable";
     }
