@@ -79,7 +79,6 @@ public class BanDuplicateClasses implements EnforcerRule {
             artifactToClasses.put(artifact, classesFoundInArtifact);
 
             File file = artifact.getFile();
-            log.debug((numberProcessed + 1) + " / " + numberOfArtifacts + "\tSearching for duplicate classes in: " + file.getAbsolutePath());
             if (file == null) {
                 log.info("OK, file is null. WTF! " + artifact.toString() + ". Ignoring...");
             } else if (!file.exists()) {
@@ -89,6 +88,7 @@ public class BanDuplicateClasses implements EnforcerRule {
             } else if (shouldIgnoreArtifactType(artifact)) {
                 log.info("File is a..." + artifact.getType() + ": " + file.getAbsolutePath() + ". Ignoring...");
             } else {
+                log.debug((numberProcessed + 1) + " / " + numberOfArtifacts + "\tSearching for duplicate classes in: " + file.getAbsolutePath());
                 classesFoundInArtifact.addAll(findClassesInJarFile(file));
             }
         }
