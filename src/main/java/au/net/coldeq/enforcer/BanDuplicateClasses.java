@@ -222,7 +222,8 @@ public class BanDuplicateClasses implements EnforcerRule {
             try {
                 Set<String> classes = new HashSet<String>();
                 for (JarEntry entry : Collections.<JarEntry>list(jar.entries())) {
-                    if (entry.getName().matches(".*\\.class") && !"module-info.class".equals(entry.getName())) {
+                    String name = entry.getName();
+                    if (name != null && name.matches(".*\\.class") && !name.contains("module-info.class")) {
                         classes.add(entry.getName());
                     }
                 }
